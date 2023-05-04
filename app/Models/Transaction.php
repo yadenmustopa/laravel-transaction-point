@@ -11,7 +11,7 @@ class Transaction extends Model
     use HasUuids, HasFactory;
     protected $casts = [
         'amount'           => 'integer',
-        'transaction_date' => EpochToDate::class
+        'transaction_date' => EpochToDateCast::class
     ];
 
     protected $dates = [
