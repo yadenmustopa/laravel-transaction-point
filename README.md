@@ -8,6 +8,7 @@
 2. Composer
 3. PostgreSQL 
 4. Git
+5.Node JS ( Last Version)
 
 ## Step And Run 
 1. clone in my github reposition with base or your terminal whatever you want
