@@ -4,16 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\CustomerResource;
+use App\Http\Resources\PaginationListResource;
+use App\Libraries\ApiResponse;
 use App\Models\Customer;
+use App\Repositories\CustomerRepository;
 
 class CustomerController extends Controller
 {
+
+    protected $customerRepo;
+
+    public function __construct(CustomerRepository $customerRepository)
+    {
+        $this->customerRepo = $customerRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        try {
+            $customers = $this->customerRepo->paginate();
+            return ApiResponse::success(__('list.success'), PaginationListResource::make($customers)->setResourceItem(CustomerResource::class));
+        } catch (\Exception $e) {
+            return ApiResponse::error(__('list.error'), ['general' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -21,7 +38,7 @@ class CustomerController extends Controller
      */
     public function create(StoreCustomerRequest $request)
     {
-        dd($request->validated());
+
     }
 
     /**
@@ -29,7 +46,12 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+        try {
+            $createdCustomer = $this->customerRepo->create($request->validated());
+            return ApiResponse::success(_('store.success'), new CustomerResource($this->customerRepo->getOneByIdOrFail($createdCustomer->id)));
+        } catch (\Exception $e) {
+            return ApiResponse::error(__('member.store.error'), ['general' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -37,7 +59,11 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer)
     {
-        //
+        try {
+
+        } catch (\Exception $e) {
+
+        }
     }
 
     /**
