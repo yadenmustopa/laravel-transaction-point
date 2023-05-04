@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Libraries\ApiResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -25,6 +26,33 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (Throwable $e) {
+
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException || $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                return ApiResponse::notFound();
+            }
+
+            if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+                return ApiResponse::unauthorized();
+            }
+
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
+                return ApiResponse::unauthorized($e->getMessage());
+            }
+
+            if ($e instanceof \Illuminate\Routing\Exceptions\InvalidSignatureException) {
+                return ApiResponse::unauthorized($e->getMessage());
+            }
+
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                return ApiResponse::error($e->getMessage(), $e->validator->getMessageBag()->getMessages(), [], 422);
+            }
+
+            // if ($e instanceof \Illuminate\Database\QueryException) {
+            //     return ApiResponse::serverError( __('response.server_error'), env('APP_DEBUG', true) === true ? $e->getMessage() : null );
+            // }
         });
     }
 }
