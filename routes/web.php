@@ -20,12 +20,12 @@ Route::get('/', function () {
     return Inertia::render('Home', ['data' => ["cek"]]);
 });
 
-Route::group(['prefix' => 'customers', 'as' => 'customer'], function () {
-    Route::get('/', [CustomerController::class, 'index']);
-    Route::post('/', [CustomerController::class, 'store']);
+Route::group(['prefix' => 'customers', 'as' => 'customer.'], function () {
+    Route::get('/', [CustomerController::class, 'index'])->name('list');
+    Route::post('/', [CustomerController::class, 'store'])->name('store');
 });
 
-Route::group(['prefix' => 'transactions', 'as' => 'transaction'], function () {
-    Route::get('/', [TransactionController::class, 'index']);
-    Route::post('/', [TransactionController::class, 'store']);
+Route::group(['prefix' => 'transactions', 'as' => 'transaction.'], function () {
+    Route::get('/', [TransactionController::class, 'index'])->name('list');
+    Route::post('/', [TransactionController::class, 'store'])->name('store');
 });
