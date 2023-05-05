@@ -32,3 +32,14 @@
  ```
 
  5. let's start
+```
+php artisan serve
+```
+and
+```
+npm run dev
+```
+or
+```
+npm run build
+```
