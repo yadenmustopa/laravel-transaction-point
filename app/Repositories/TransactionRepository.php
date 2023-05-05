@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories;
 
-use App\Http\QueryFilters\SpatieCustom\Campaign\DateRangeFilter;
+use App\Http\QueryFilters\Transaction\DateRangeFilter;
 use App\Models\Transaction;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -20,12 +20,12 @@ class TransactionRepository extends BaseRepository
     public function list($perPage = 10)
     {
         $baseQuery = $this->query()->with([
-            'transactions'
+            'customer'
         ]);
 
 
         $query = QueryBuilder::for ($baseQuery)->allowedFilters([
-            AllowedFilter::custom('date_range', new DateRangeFilter),
+            AllowedFilter::custom('date_range', new DateRangeFilter())
         ])
             ->defaultSort('-created_at', '-updated_at')
             ->allowedSorts('created_at', 'updated_at', 'name');

@@ -22,10 +22,10 @@ if (!function_exists('epochToDate')) {
          * isValidTimeStamp
          * source for https://stackoverflow.com/questions/2524680/check-whether-the-string-is-a-unix-timestamp
          *
-         * @param  string $timestamp
+         * @param  mixed $timestamp
          * @return bool
          */
-        function isValidTimeStamp(string $timestamp): bool
+        function isValidTimeStamp(mixed $timestamp): bool
         {
             return ((string) (int) $timestamp === $timestamp)
                 && ($timestamp <= PHP_INT_MAX)

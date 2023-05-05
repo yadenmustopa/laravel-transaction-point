@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EpochToDateCast;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,7 @@ class Transaction extends Model
     ];
 
     protected $fillable = [
+        'customer_id',
         'amount',
         'status',
         'description',

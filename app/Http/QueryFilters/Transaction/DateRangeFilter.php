@@ -1,15 +1,14 @@
 <?php
-namespace App\Http\QueryFilters\SpatieCustom\Campaign;
+namespace App\Http\QueryFilters\Transaction;
+
 
 
 use App\Http\QueryFilters\Filter as QueryFiltersFilter;
 use App\Traits\InvokeCustomFilterTrait;
-use App\Traits\SetPipelineTrait;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class DateRangeFilter extends QueryFiltersFilter
 {
-    use SetPipelineTrait, InvokeCustomFilterTrait;
+    use InvokeCustomFilterTrait;
 
     /**
      * @param mixed $builder

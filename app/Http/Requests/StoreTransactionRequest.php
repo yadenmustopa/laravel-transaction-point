@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Enums\ServiceEnum;
 use App\Enums\StatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreTransactionRequest extends FormRequest
 {
@@ -25,9 +25,10 @@ class StoreTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => ['sometimes', 'string', new Rule(ServiceEnum::class)],
-            'status'      => ['required', new Rule(StatusEnum::class)],
-            'amount'      => ['required', 'integer', min(0)]
+            'customer_id' => ['required', 'uuid', 'exists:customers,id'],
+            'description' => ['required', 'string', new Enum(ServiceEnum::class)],
+            'status'      => ['required', new Enum(StatusEnum::class)],
+            'amount'      => ['required', 'integer', 'min:0']
         ];
     }
 }

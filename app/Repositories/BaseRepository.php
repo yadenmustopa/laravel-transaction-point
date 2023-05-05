@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories;
 
-
+use App\Contracts\BaseRepositoryContract as ContractsBaseRepositoryContract;
 use Exception;
 use BadMethodCallException;
 use Illuminate\Support\Str;
@@ -19,7 +19,7 @@ use Rakhasa\Icore\Enums\UserStatusEnum;
  * @author Yaden Mustopa
  * @copyright (c) 2023
  */
-abstract class BaseRepository implements BaseRepositoryContract
+abstract class BaseRepository implements ContractsBaseRepositoryContract
 {
     use ForwardsCalls;
 

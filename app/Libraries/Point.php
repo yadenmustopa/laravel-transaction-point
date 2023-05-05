@@ -20,7 +20,7 @@ class Point
     static function get($description = "", $totalTransaction)
     {
         $rulePoints = RulePointEnum::values();
-        if ($description !== "Beli Pulsa" || $description !== "Bayar Listrik") {
+        if ($description !== "Beli Pulsa" && $description !== "Bayar Listrik") {
             return 0;
         }
 
@@ -40,11 +40,10 @@ class Point
     {
         $rangeOne = 10000;
         $rangeTwo = 30000;
-        $checked  = false;
         if ($totalTransaction <= $rangeOne) {
             return 0;
         }
-        $points = self::getPoints($totalTransaction, RulePointEnum::beliPulsa->value, $rangeOne, $rangeTwo);
+        $points = self::getPoints($totalTransaction, RulePointEnum::beliPulsa->value, $rangeOne);
         return array_sum($points);
     }
 
@@ -55,13 +54,12 @@ class Point
      */
     static function checkBayarListrik($totalTransaction)
     {
-        $rangeOne = 10000;
-        $rangeTwo = 30000;
-        $checked  = false;
+        $rangeOne = 50000;
+        $rangeTwo = 100000;
         if ($totalTransaction <= $rangeOne) {
             return 0;
         }
-        $points = self::getPoints($totalTransaction, RulePointEnum::beliPulsa->value, $rangeOne, $rangeTwo);
+        $points = self::getPoints($totalTransaction, RulePointEnum::bayarListrik->value, $rangeOne);
         return array_sum($points);
     }
 
@@ -73,28 +71,28 @@ class Point
      * @param int $rangeTwo
      * @return array<float>
      */
-    static function getPoints($totalTransaction, $rulePoint, $rangeOne, $rangeTwo)
+    static function getPoints($totalTransaction, $rulePoint, $rangeOne)
     {
-        $modulus  = self::getModulusCalculation($rangeOne, $totalTransaction);
-        $amount   = ($modulus <= $rangeOne) ? $modulus : $rangeOne;
-        $points[] = self::calculate($rulePoint, $rangeOne, $amount);
-        if ($modulus > $rangeTwo) {
-            $modulus  = self::getModulusCalculation($rangeTwo, $totalTransaction);
-            $points[] = self::calculate($rulePoint, $rangeOne, $modulus);
-        }
 
+        $points      = [];
+        $subtraction = self::getRemainingSubtractionCalculation($rangeOne, $totalTransaction);
+        $amount      = ($subtraction > 0) ? $rangeOne : $totalTransaction;
+        $points[]    = self::calculate($amount, $rulePoint, 1);
+        if ($subtraction) {
+            $points[] = self::calculate($subtraction, $rulePoint, 2);
+        }
         return $points;
     }
 
     /**
-     * Summary of getModulusCalculation
+     * Summary of getRemainingSubtractionCalculation
      * @param  $range
      * @param mixed $totalTransaction
      * @return int
      */
-    static function getModulusCalculation($range, $totalTransaction)
+    static function getRemainingSubtractionCalculation($range, $totalTransaction)
     {
-        return (int) $totalTransaction % $range;
+        return (int) $totalTransaction - $range;
     }
 
     /**
@@ -104,7 +102,7 @@ class Point
      * @param mixed $amount
      * @return float
      */
-    static function calculate($rulePoint, $rangePoint, $amount)
+    static function calculate($amount, $rulePoint, $rangePoint)
     {
         return (float) ($amount / $rulePoint) * $rangePoint;
     }
