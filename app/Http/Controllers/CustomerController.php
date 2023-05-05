@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ListCustomerRequest;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
@@ -21,12 +22,14 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Summary of index
+     * @param \App\Http\Requests\ListCustomerRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         try {
-            $customers = $this->customerRepo->paginate();
+            $customers = $this->customerRepo->list();
             return ApiResponse::success(__('list.success'), PaginationListResource::make($customers)->setResourceItem(CustomerResource::class));
         } catch (\Exception $e) {
             return ApiResponse::error(__('list.error'), ['general' => $e->getMessage()]);

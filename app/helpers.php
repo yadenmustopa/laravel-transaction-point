@@ -32,4 +32,18 @@ if (!function_exists('epochToDate')) {
                 && ($timestamp >= ~PHP_INT_MAX);
         }
     }
+
+    //camelToDashCase
+    if (!function_exists('camelToDashCase')) {
+        /**
+         * camelToDashCase
+         *
+         * @param  string $name
+         * @return string
+         */
+        function camelToDashCase($name)
+        {
+            return ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '-$0', $name)), '-');
+        }
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ListTransactionRequest;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Http\Resources\PaginationListResource;
@@ -23,15 +24,14 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(ListTransactionRequest $request)
     {
         try {
-            $transactions = $this->transactionRepo->paginate();
+            $transactions = $this->transactionRepo->list();
 
             return ApiResponse::success(
                 __('list.success'),
-                PaginationListResource::make($transactions)->setResourceItem(TransactionResource::class,
-                )
+                PaginationListResource::make($transactions)->setResourceItem(TransactionResource::class)
             );
         } catch (Exception $exception) {
             return ApiResponse::error(__('list.error'), ['general' => $exception->getMessage()]);
@@ -54,7 +54,7 @@ class TransactionController extends Controller
         try {
             $createdTransaction = $this->transactionRepo->create($request->validated());
             return ApiResponse::success(_('store.success'), new TransactionResource($this->transactionRepo->getOneByIdOrFail($createdTransaction->id)));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return ApiResponse::error(__('member.store.error'), ['general' => $e->getMessage()]);
         }
     }
