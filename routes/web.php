@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,5 +21,11 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'customers', 'as' => 'customer'], function () {
-    Route::post('/', [CustomerController::class, 'create']);
+    Route::get('/', [CustomerController::class, 'index']);
+    Route::post('/', [CustomerController::class, 'store']);
+});
+
+Route::group(['prefix' => 'transactions', 'as' => 'transaction'], function () {
+    Route::get('/', [TransactionController::class, 'index']);
+    Route::post('/', [TransactionController::class, 'store']);
 });

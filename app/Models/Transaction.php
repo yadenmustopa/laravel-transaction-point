@@ -24,4 +24,9 @@ class Transaction extends Model
         'description',
         'transaction_date'
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 }

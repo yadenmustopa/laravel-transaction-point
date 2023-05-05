@@ -50,7 +50,7 @@ class CustomerController extends Controller
             $createdCustomer = $this->customerRepo->create($request->validated());
             return ApiResponse::success(_('store.success'), new CustomerResource($this->customerRepo->getOneByIdOrFail($createdCustomer->id)));
         } catch (\Exception $e) {
-            return ApiResponse::error(__('member.store.error'), ['general' => $e->getMessage()]);
+            return ApiResponse::error(__('store.error'), ['general' => $e->getMessage()]);
         }
     }
 

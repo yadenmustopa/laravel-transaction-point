@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\ServiceEnum;
-use App\Enums\StatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreTransactionRequest extends FormRequest
+class ListCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +22,7 @@ class StoreTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => ['sometimes', 'string', new Rule(ServiceEnum::class)],
-            'status'      => ['required', new Rule(StatusEnum::class)],
-            'amount'      => ['required', 'integer', min(0)]
+            'with_point' => ['required', 'int', min(0), max(1)]
         ];
     }
 }
